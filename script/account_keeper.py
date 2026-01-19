@@ -129,17 +129,27 @@ def register_accounts(count: int):
         
         register_script = os.path.join(SCRIPT_DIR, "register_accounts.py")
         
-        result = subprocess.run(
-            [sys.executable, register_script],
+        # 使用 Popen 实时输出日志
+        process = subprocess.Popen(
+            [sys.executable, "-u", register_script],
             env=env,
             cwd=PROJECT_ROOT,
-            capture_output=False
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            bufsize=1,
+            universal_newlines=True
         )
         
-        if result.returncode == 0:
+        # 实时读取并输出
+        for line in process.stdout:
+            print(line, end='', flush=True)
+        
+        process.wait()
+        
+        if process.returncode == 0:
             log(f"注册完成")
         else:
-            log(f"注册脚本返回错误码: {result.returncode}", "WARN")
+            log(f"注册脚本返回错误码: {process.returncode}", "WARN")
             
     except Exception as e:
         log(f"注册账号异常: {e}", "ERR")
