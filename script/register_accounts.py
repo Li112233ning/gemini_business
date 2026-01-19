@@ -227,13 +227,19 @@ def register(driver):
     """注册单个账号"""
     email = create_email()
     if not email:
+        log("邮箱创建失败", "ERR")
         return None, False, None
 
     wait = WebDriverWait(driver, 60)
 
-    # 1. 访问登录页
-    driver.get(LOGIN_URL)
-    time.sleep(2)
+    try:
+        # 1. 访问登录页
+        log(f"访问登录页: {LOGIN_URL[:50]}...")
+        driver.get(LOGIN_URL)
+        time.sleep(2)
+    except Exception as e:
+        log(f"访问登录页失败: {e}", "ERR")
+        return email, False, None
 
     # 2. 输入邮箱
     log("输入邮箱...")
