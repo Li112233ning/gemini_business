@@ -28,8 +28,6 @@ from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse, parse_qs
 from datetime import datetime
-from concurrent.futures import ThreadPoolExecutor, as_completed
-import threading
 import time, random, json, os, sys
 import requests
 
@@ -43,14 +41,9 @@ sys.path.insert(0, PROJECT_ROOT)
 
 # ========== 配置 (支持环境变量) ==========
 TOTAL_ACCOUNTS = int(os.environ.get("TOTAL_ACCOUNTS", 1))
-PARALLEL_WORKERS = int(os.environ.get("PARALLEL_WORKERS", 1))  # 并行数（默认单线程）
 MAIL_API = os.environ.get("MAIL_API", "https://mail.chatgpt.org.uk")
 MAIL_KEY = os.environ.get("MAIL_KEY", "gpt-test")
 OUTPUT_DIR = os.environ.get("OUTPUT_DIR", os.path.join(PROJECT_ROOT, "data", "accounts"))
-
-# 线程安全计数器
-success_lock = threading.Lock()
-success_count = 0
 LOGIN_URL = "https://auth.business.gemini.google/login?continueUrl=https:%2F%2Fbusiness.gemini.google%2F&wiffid=CAoSJDIwNTlhYzBjLTVlMmMtNGUxZC1hY2JkLThmOGY2ZDE0ODM1Mg"
 
 # XPath
