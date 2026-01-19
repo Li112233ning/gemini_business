@@ -96,8 +96,10 @@ def create_email():
             email = r.json()['data']['email']
             log(f"邮箱创建: {email}")
             return email
+        else:
+            log(f"邮箱API返回: {r.status_code} - {r.text[:200]}", "ERR")
     except Exception as e:
-        log(f"创建邮箱失败: {e}", "ERR")
+        log(f"创建邮箱异常: {e}", "ERR")
     return None
 
 
